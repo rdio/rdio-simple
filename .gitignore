@@ -1,0 +1,4 @@
+.*.swp
+*.pyo
+*.pyc
+php/examples/rdio-consumer-credentials.php
