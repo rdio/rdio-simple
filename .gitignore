@@ -2,3 +2,5 @@
 *.pyo
 *.pyc
 php/examples/rdio-consumer-credentials.php
+python/examples/rdio_consumer_credentials.py
+.idea
