@@ -23,7 +23,7 @@ The current token (either request or access) is stored in $rdio->token as an
 array with the token and token secret.
 
 Examples:
-Both examples authenticate and then list the user's playlists. They use 
+Both examples authenticate and then list the user's playlists. They use
 credentials stored in rdio-consumer-credentials.php.
   examples/command-line.php
-  examples/playlist-listing.php
+  examples/web-based.php
