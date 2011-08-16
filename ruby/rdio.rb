@@ -32,20 +32,10 @@ class Rdio
     @token = token
   end
 
-  def __signed_post(url, params)
-    auth = om(@consumer, url, params, @token)
-    url = URI.parse(url)
-    http = Net::HTTP.new(url.host, url.port)
-    req = Net::HTTP::Post.new(url.path, {'Authorization' => auth})
-    req.set_form_data(params)
-    res = http.request(req)
-    return res.body
-  end
-
   def begin_authentication(callback_url)
     # request a request token from the server
-    response = __signed_post('http://api.rdio.com/oauth/request_token',
-                             {'oauth_callback' => callback_url})
+    response = signed_post('http://api.rdio.com/oauth/request_token',
+                           {'oauth_callback' => callback_url})
     # parse the response
     parsed = CGI.parse(response)
     # save the token
@@ -56,8 +46,8 @@ class Rdio
 
   def complete_authentication(verifier)
     # request an access token
-    response = __signed_post('http://api.rdio.com/oauth/access_token',
-                             {'oauth_verifier' => verifier})
+    response = signed_post('http://api.rdio.com/oauth/access_token',
+                           {'oauth_verifier' => verifier})
     # parse the response
     parsed = CGI.parse(response)
     # save the token
@@ -70,6 +60,19 @@ class Rdio
     # put the method in the dict
     params['method'] = method
     # call to the server and parse the response
-    return JSON.load(__signed_post('http://api.rdio.com/1/', params))
+    return JSON.load(signed_post('http://api.rdio.com/1/', params))
   end
+
+  private
+
+  def signed_post(url, params)
+    auth = om(@consumer, url, params, @token)
+    url = URI.parse(url)
+    http = Net::HTTP.new(url.host, url.port)
+    req = Net::HTTP::Post.new(url.path, {'Authorization' => auth})
+    req.set_form_data(params)
+    res = http.request(req)
+    return res.body
+  end
+
 end
