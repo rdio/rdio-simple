@@ -12,9 +12,9 @@ Usage:
 To use the library just load the Rdio class from the rdio module:
   from rdio import Rdio
 Create an Rdio instance passing in a tuple with your consumer key and secret:
-  rdio = Rdio(array("consumerkey", "consumersecret"))
+  rdio = Rdio(("consumerkey", "consumersecret"))
 Make API calls with the call(methodname, params) method:
-  rdio.call('get', keys='a254895,a104386')
+  rdio.call('get', {'keys':'a254895,a104386'})
 Authenticate and authorize with the begin_authentication and
 complete_authentication methods.
 
@@ -22,8 +22,8 @@ The current token (either request or access) is stored in rdio.token as a
 tuple with the token and token secret.
 
 Examples:
-Both examples authenticate and then list the user's playlists. They use 
-credentials stored in rdio-consumer-credentials.php.
+Both examples authenticate and then list the user's playlists. They use
+credentials stored in rdio-consumer-credentials.py.
   examples/command-line.py
   examples/web-based.py
 NOTE: web-based.py depends on web.py (http://www.webpy.org/)
