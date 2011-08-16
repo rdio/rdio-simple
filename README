@@ -1,4 +1,4 @@
 rdio-simple - a set of simple clients libraries for Rdio's web API.
 
-These libraries for Python and PHP implement the subset of OAuth that is
-required to talk to the Rdio service with minimal external dependencies.
+These libraries for Python, PHP and Ruby implement the subset of OAuth that
+is required to talk to the Rdio service with minimal external dependencies.
