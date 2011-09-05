@@ -18,14 +18,14 @@ app.route("/", function (env, callback) {
         var rdio = new Rdio([cred.RDIO_CONSUMER_KEY, cred.RDIO_CONSUMER_SECRET],
                             [accessToken, accessTokenSecret]);
 
-        rdio.call("currentUser", {}, function (err, data) {
+        rdio.call("currentUser", function (err, data) {
             if (err && link.handleError(err, env, callback)) {
                 return;
             }
 
             var currentUser = data.result;
 
-            rdio.call("getPlaylists", {}, function (err, data) {
+            rdio.call("getPlaylists", function (err, data) {
                 if (err && link.handleError(err, env, callback)) {
                     return;
                 }

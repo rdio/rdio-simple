@@ -50,6 +50,11 @@ Rdio.prototype.completeAuthentication = function completeAuthentication(verifier
 }
 
 Rdio.prototype.call = function call(method, params, callback) {
+    if (typeof params == "function") {
+        callback = params;
+        params = null;
+    }
+
     var copy = {};
 
     if (params) {
