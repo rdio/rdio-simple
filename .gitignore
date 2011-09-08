@@ -4,6 +4,6 @@
 php/examples/rdio-consumer-credentials.php
 python/examples/rdio_consumer_credentials.py
 ruby/examples/rdio_consumer_credentials.rb
-javascript/examples/rdio_consumer_credentials.js
-javascript/node_modules
+node/examples/rdio_consumer_credentials.js
+node/node_modules
 .idea
