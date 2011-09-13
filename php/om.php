@@ -32,16 +32,18 @@ function __om_escape($s) {
 /**
  * Generates an OAuth signature
  *
- * @param array  $consumer an array with the consumer key and consumer secret
- * @param string $url      the URL being requested
- * @param array  $params   the POST parameters
- * @param array  $token    the OAuth token, an array of token and token secret
- * @param string $method   the HTTP method, POST by default
- * @param string $realm    the HTTP authorization realm (optional)
+ * @param array  $consumer  an array with the consumer key and consumer secret
+ * @param string $url       the URL being requested
+ * @param array  $params    the POST parameters
+ * @param array  $token     the OAuth token, an array of token and token secret
+ * @param string $method    the HTTP method, POST by default
+ * @param string $realm     the HTTP authorization realm (optional)
+ * @param string $timestamp the OAuth timestamp (optional, will be automatically generated)
+ * @param string $nonce     the OAuth nonce (optional, will be automatically generated)
  * @return An Authorization header
  *
  */
-function om($consumer, $url, $params, $token=NULL, $method='POST', $realm=NULL) {
+function om($consumer, $url, $params, $token=NULL, $method='POST', $realm=NULL, $timestamp=NULL, $nonce=NULL) {
   # the method must be upper-case
   $method = strtoupper($method);
 
@@ -67,8 +69,16 @@ function om($consumer, $url, $params, $token=NULL, $method='POST', $realm=NULL) 
 
   # add OAuth params
   $params['oauth_version'] = '1.0';
-  $params['oauth_timestamp'] = ''.time();
-  $params['oauth_nonce'] = ''.rand(0,1000000);
+  if ($timestamp == NULL) {
+    $params['oauth_timestamp'] = ''.time();
+  } else {
+    $params['oauth_timestamp'] = $timestamp;
+  }
+  if ($nonce == NULL) {
+    $params['oauth_nonce'] = ''.rand(0,1000000);
+  } else {
+    $params['oauth_nonce'] = $nonce;
+  }
   $params['oauth_signature_method'] = 'HMAC-SHA1';
   $params['oauth_consumer_key'] = $consumer[0];
 

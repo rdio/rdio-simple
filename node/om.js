@@ -4,7 +4,7 @@ var qs = require("querystring"),
 
 module.exports = om;
 
-function om(consumer, urlString, params, token, method, realm) {
+function om(consumer, urlString, params, token, method, realm, timestamp, nonce) {
     params = params || [];
     method = (method || "POST").toUpperCase();
 
@@ -28,8 +28,13 @@ function om(consumer, urlString, params, token, method, realm) {
         }
     }
 
-    var timestamp = Math.round(new Date().getTime() / 1000).toString();
-    var nonce = Math.round(Math.random() * 1000000).toString();
+    // Generate nonce and timestamp if they weren't provided
+    if (typeof timestamp == "undefined" || timestamp == null) {
+        timestamp = Math.round(new Date().getTime() / 1000).toString();
+    }
+    if (typeof nonce == "undefined" || nonce == null) {
+        nonce = Math.round(Math.random() * 1000000).toString();
+    }
 
     // Add OAuth params.
     params.push(["oauth_version", "1.0"]);
@@ -42,7 +47,7 @@ function om(consumer, urlString, params, token, method, realm) {
     var hmacKey = consumer[1] + "&";
 
     // If a token was provided, add it to the params and hmac key.
-    if (typeof token != "undefined") {
+    if (typeof token != "undefined" && token != null) {
         params.push(["oauth_token", token[0]]);
         hmacKey += token[1];
     }

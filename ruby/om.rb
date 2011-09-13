@@ -41,11 +41,11 @@ require 'cgi'
 require 'digest'
 require 'digest/sha1'
 
-def om(consumer, url, post_params, token=nil, method='POST', realm=nil)
+def om(consumer, url, post_params, token=nil, method='POST', realm=nil, timestamp=nil, nonce=nil)
   # A one-shot simple OAuth signature generator
 
   # the method must be upper-case
-  method.upcase!
+  method = method.upcase
 
   # we want params as an Array of name / value pairs
   if post_params.is_a?(Array)
@@ -61,7 +61,7 @@ def om(consumer, url, post_params, token=nil, method='POST', realm=nil)
   # remove username & password
   url.user = url.password = nil
   # host is lowercase
-  url.host.downcase!
+  url.host = url.host.downcase
 
   # add URL params to the params
   if url.query
@@ -75,8 +75,8 @@ def om(consumer, url, post_params, token=nil, method='POST', realm=nil)
   # add OAuth params
   params = params + [
     ['oauth_version', '1.0'],
-    ['oauth_timestamp', Time.now.to_i.to_s],
-    ['oauth_nonce', rand(1000000).to_s],
+    ['oauth_timestamp', timestamp || Time.now.to_i.to_s],
+    ['oauth_nonce', nonce || rand(1000000).to_s],
     ['oauth_signature_method', 'HMAC-SHA1'],
     ['oauth_consumer_key', consumer[0]],
   ]

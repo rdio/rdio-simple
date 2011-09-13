@@ -36,11 +36,13 @@ Optional additional arguments are:
   token = (oauth_token, oauth_token_secret)
   method = "POST"
   realm = "Realm-for-authorization-header"
+  timestamp = oauth timestamp - otherwise auto generated
+  nonce = oauth nonce - otherwise auto generated
 """
 
 import time, random, hmac, hashlib, urllib, binascii, urlparse
 
-def om(consumer, url, post_params, token=None, method='POST', realm=None):
+def om(consumer, url, post_params, token=None, method='POST', realm=None, timestamp=None, nonce=None):
   """A one-shot simple OAuth signature generator"""
 
   # the method must be upper-case
@@ -60,6 +62,7 @@ def om(consumer, url, post_params, token=None, method='POST', realm=None):
       netloc = netloc[:-3]
   elif scheme == 'https' and netloc[-4:] == ':443':
       netloc = netloc[:-4]
+  netloc = netloc.lower()
   normalized_url = '%s://%s%s' % (scheme, netloc, path)
 
   # add query-string params (if any) to the params list
@@ -68,8 +71,8 @@ def om(consumer, url, post_params, token=None, method='POST', realm=None):
   # add OAuth params
   params.extend([
     ('oauth_version', '1.0'),
-    ('oauth_timestamp', str(int(time.time()))),
-    ('oauth_nonce', str(random.randint(0, 1000000))),
+    ('oauth_timestamp', timestamp if timestamp is not None else str(int(time.time()))),
+    ('oauth_nonce', nonce if nonce is not None else str(random.randint(0, 1000000))),
     ('oauth_signature_method', 'HMAC-SHA1'),
     ('oauth_consumer_key', consumer[0]),
   ])
