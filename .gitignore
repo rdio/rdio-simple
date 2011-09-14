@@ -9,3 +9,4 @@ node/examples/rdio_consumer_credentials.js
 node/node_modules
 java/examples/com/rdio/simple/examples/ConsumerCredentials.java
 .idea
+*.iml
