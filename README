@@ -1,7 +1,11 @@
 rdio-simple - a set of simple clients libraries for Rdio's web API.
 
-These libraries for Python, PHP and Ruby implement the subset of OAuth that
-is required to talk to the Rdio service with minimal external dependencies.
+These libraries for Python, PHP, Ruby, Node.js and Java implement the subset
+of OAuth that is required to talk to the Rdio service with minimal external
+dependencies.
 
 Documentation is at: http://developer.rdio.com/docs/read/rest/rdiosimple
 Examples for each language are under each language directory.
+
+There is a testing framework that verifies that the languages implement
+request signing consistently in the tests directory.
