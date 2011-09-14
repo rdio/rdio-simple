@@ -6,7 +6,7 @@ Requirements:
   PHP5
   curl
 
-To install the library simple add the om.php and rdio.php files to your source
+To install the library simply add the om.php and rdio.php files to your source
 directory.
 
 Usage:
