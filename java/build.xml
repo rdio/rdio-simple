@@ -1,0 +1,17 @@
+<project>
+  <target name="clean">
+    <delete dir="classes"/>
+  </target>
+
+  <target name="compile">
+    <mkdir dir="classes"/>
+    <javac srcdir="src" destdir="classes"/>
+    <javac srcdir="examples" destdir="classes/"/>
+  </target>
+
+  <target name="command-line" depends="compile">
+    <java classpath="classes/" classname="com.rdio.simple.examples.CommandLine" fork="yes"/>
+  </target>
+
+  <target name="default" depends="compile"></target>
+</project>

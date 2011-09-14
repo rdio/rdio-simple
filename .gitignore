@@ -1,9 +1,11 @@
 .*.swp
 *.pyo
 *.pyc
+*.class
 php/examples/rdio-consumer-credentials.php
 python/examples/rdio_consumer_credentials.py
 ruby/examples/rdio_consumer_credentials.rb
 node/examples/rdio_consumer_credentials.js
 node/node_modules
+java/examples/com/rdio/simple/examples/ConsumerCredentials.java
 .idea
