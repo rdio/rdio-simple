@@ -51,7 +51,7 @@ def om(consumer, url, post_params, token=nil, method='POST', realm=nil, timestam
   if post_params.is_a?(Array)
     params = post_params
   else
-    params = post_params.collect
+    params = post_params.collect { |x| x }
   end
 
   # normalize the URL
@@ -99,7 +99,7 @@ def om(consumer, url, post_params, token=nil, method='POST', realm=nil, timestam
           c == '-' or c == '.' or c == '_' or c == '~')
         c
       else
-        '%%%02X' % c[0]
+        '%%%02X' % c.unpack('c')
       end
     end
     chars.join

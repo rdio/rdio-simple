@@ -21,6 +21,7 @@ import urllib, subprocess, time, random
 testers = [('PHP', ['php', './tester.php']),
     ('Python', ['python', './tester.py']),
     ('Ruby', ['ruby', './tester.rb']),
+    ('Ruby 1.9', ['ruby-1.9', './tester.rb']),
     ('Node.js', ['node', './tester.node']),
     ('Java', ['java', '-classpath', '../java/classes:.', 'Tester'])]
 
