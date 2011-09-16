@@ -34,3 +34,7 @@ and run it with:
 Before you can compile or run it you'll have to create a:
   examples/com/rdio/simple/examples/ConsumerCredentials.java
 with consumer credentials from http://developer.rdio.com/
+
+There's an additional example available at:
+https://github.com/rdio/rdio-simple-play-example
+It's a web based example that uses the Play! framework.
