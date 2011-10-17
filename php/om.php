@@ -26,7 +26,7 @@
 
 # UTF-8 and escape the key/value pairs
 function __om_escape($s) {
-  return str_replace('%7E', '~', rawurlencode(utf8_encode($s)));
+  return str_replace('%7E', '~', rawurlencode($s));
 };
 
 /**

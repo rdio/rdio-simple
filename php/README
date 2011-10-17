@@ -22,6 +22,10 @@ complete_authentication methods.
 The current token (either request or access) is stored in $rdio->token as an
 array with the token and token secret.
 
+Note: PHP does not support unicode but the Rdio API always expects UTF-8
+strings. If your strings are in latin-1 then you'll have to encode them to
+UTF-8 using PHP's utf8_encode function before passing them into the library.
+
 Examples:
 Both examples authenticate and then list the user's playlists. They use
 credentials stored in rdio-consumer-credentials.php.
