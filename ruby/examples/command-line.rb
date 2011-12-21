@@ -23,7 +23,7 @@ require 'rubygems'
 
 $LOAD_PATH << '../'
 require 'rdio'
-require 'rdio_consumer_credentials'
+require './rdio_consumer_credentials'
 
 # create an instance of the Rdio object with our consumer credentials
 rdio = Rdio.new([RDIO_CONSUMER_KEY, RDIO_CONSUMER_SECRET])
