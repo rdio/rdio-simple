@@ -53,6 +53,9 @@ def om(consumer, url, post_params, token=nil, method='POST', realm=nil, timestam
   else
     params = post_params.collect { |x| x }
   end
+  
+  # we want those pairs to be strings
+  params = params.collect { |k,v| [k.to_s, v.to_s]} 
 
   # normalize the URL
   url = URI.parse(url)
