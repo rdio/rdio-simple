@@ -74,5 +74,9 @@ class Rdio
     res = http.request(req)
     return res.body
   end
+  
+  def method_missing(method, *params)
+    call(method.to_s, params[0])
+  end
 
 end
