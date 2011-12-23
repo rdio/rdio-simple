@@ -202,7 +202,7 @@ public abstract class Om {
     for (char c = 'a'; c <= 'z'; c++) base64_map[i++] = c;
     for (char c = '0'; c <= '9'; c++) base64_map[i++] = c;
     base64_map[i++] = '+';
-    base64_map[i++] = '/';
+    base64_map[i] = '/';
   }
 
   public static char[] base64(byte[] in) {
@@ -211,12 +211,11 @@ public abstract class Om {
     int oLen = ((iLen + 2) / 3) * 4;         // output length including padding
     char[] out = new char[oLen];
     int ip = 0;
-    int iEnd = iLen;
     int op = 0;
-    while (ip < iEnd) {
+    while (ip < iLen) {
       int i0 = in[ip++] & 0xff;
-      int i1 = ip < iEnd ? in[ip++] & 0xff : 0;
-      int i2 = ip < iEnd ? in[ip++] & 0xff : 0;
+      int i1 = ip < iLen ? in[ip++] & 0xff : 0;
+      int i2 = ip < iLen ? in[ip++] & 0xff : 0;
       int o0 = i0 >>> 2;
       int o1 = ((i0 & 3) << 4) | (i1 >>> 4);
       int o2 = ((i1 & 0xf) << 2) | (i2 >>> 6);
