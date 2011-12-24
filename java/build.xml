@@ -5,8 +5,8 @@
 
   <target name="compile">
     <mkdir dir="classes"/>
-    <javac srcdir="src" destdir="classes"/>
-    <javac srcdir="examples" destdir="classes/"/>
+    <javac srcdir="src" destdir="classes" debug="true"/>
+    <javac srcdir="examples" destdir="classes/" debug="true"/>
   </target>
 
   <target name="command-line" depends="compile">

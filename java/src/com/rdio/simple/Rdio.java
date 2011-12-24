@@ -28,34 +28,59 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+@SuppressWarnings("UnusedDeclaration")
 public class Rdio {
-  public String consumerKey;
-  public String consumerSecret;
-  public String token;
-  public String tokenSecret;
-
+  private Consumer consumer;
+  private Token token;
+  
   /**
    * Create a new Rdio client object without a token.
-   * @param consumerKey    the OAuth consumer key
-   * @param consumerSecret the OAuth consumer secret
+   * @param consumer the OAuth consumer
    */
-  public Rdio(String consumerKey, String consumerSecret) {
-    this.consumerKey = consumerKey;
-    this.consumerSecret = consumerSecret;
+  public Rdio(Consumer consumer) {
+    this.consumer = consumer;
   }
 
   /**
    * Create a new Rdio client object with a token.
-   * @param consumerKey    the OAuth consumer key
-   * @param consumerSecret the OAuth consumer secret
-   * @param token          the OAuth token
-   * @param tokenSecret    the OAuth token secret
+   * @param consumer the OAuth consumer
+   * @param token    the OAuth token
    */
-  public Rdio(String consumerKey, String consumerSecret, String token, String tokenSecret) {
-    this.consumerKey = consumerKey;
-    this.consumerSecret = consumerSecret;
+  public Rdio(Consumer consumer, Token token) {
+    this.consumer = consumer;
     this.token = token;
-    this.tokenSecret = tokenSecret;
+  }
+
+  /**
+   * Get the consumer
+   * @return the consumer.
+   */
+  public synchronized Consumer getConsumer() {
+    return consumer;
+  }
+
+  /**
+   * Get the token
+   * @return the token.
+   */
+  public synchronized Token getToken() {
+    return token;
+  }
+
+  /**
+   * Set the consumer
+   * @param consumer the consumer.
+   */
+  public synchronized void setConsumer(Consumer consumer) {
+    this.consumer = consumer;
+  }
+
+  /**
+   * Set the token
+   * @param token the token.
+   */
+  public synchronized void setToken(Token token) {
+    this.token = token;
   }
 
   /**
@@ -66,7 +91,11 @@ public class Rdio {
    * @throws IOException in the event of any network errors
    */
   private String signedPost(String url, Parameters params) throws IOException {
-    String auth = Om.sign(consumerKey, consumerSecret, url, params, token, tokenSecret, "POST", null);
+    String auth;
+    synchronized(this) {
+      auth = Om.sign(consumer.key, consumer.secret, url, params,
+              (token == null)?null:token.token, (token == null)?null:token.secret, "POST", null);
+    }
 
     try {
       HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
@@ -74,8 +103,10 @@ public class Rdio {
       connection.setRequestProperty("Authorization", auth);
       connection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
       connection.setDoOutput(true);
+      String postBody = params.toPercentEncoded();
+      connection = modifyConnection(connection, url, params);
       OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-      writer.write(params.toPercentEncoded());
+      writer.write(postBody);
       writer.close();
       InputStreamReader reader = new InputStreamReader(connection.getInputStream());
       int length = connection.getContentLength();
@@ -94,6 +125,19 @@ public class Rdio {
   }
 
   /**
+   * Modify the HttpURLConnection for a signedPost.
+   * The default implementation does nothing.
+   * @param connection the HttpURLConnection
+   * @param url the URL being requested
+   * @param params the parameters being passed
+   * @return the modified HttpURLConnection
+   */
+  @SuppressWarnings("UnusedParameters")
+  protected HttpURLConnection modifyConnection(HttpURLConnection connection, String url, Parameters params) {
+    return connection;
+  }
+
+  /**
    * Begin the authentication process. Fetch an OAuth request token associated with the supplied callback.
    * Store it on this Rdio object.
    * @param callback     the callback URL or "oob" for the PIN flow
@@ -104,10 +148,12 @@ public class Rdio {
     String response = signedPost("http://api.rdio.com/oauth/request_token",
         Parameters.build("oauth_callback", callback));
     Parameters parsed = Parameters.fromPercentEncoded(response);
-    token = parsed.get("oauth_token");
-    tokenSecret = parsed.get("oauth_token_secret");
-
-    return parsed.get("login_url") + "?oauth_token=" + parsed.get("oauth_token");
+    String url;
+    synchronized (this) {
+      token = new Token(parsed.get("oauth_token"), parsed.get("oauth_token_secret"));
+      url = parsed.get("login_url") + "?oauth_token=" + token.token;
+    }
+    return url;
   }
 
   /**
@@ -120,8 +166,9 @@ public class Rdio {
     String response = signedPost("http://api.rdio.com/oauth/access_token",
         Parameters.build("oauth_verifier", verifier));
     Parameters parsed = Parameters.fromPercentEncoded(response);
-    token = parsed.get("oauth_token");
-    tokenSecret = parsed.get("oauth_token_secret");
+    synchronized(this) {
+      token = new Token(parsed.get("oauth_token"), parsed.get("oauth_token_secret"));
+    }
   }
 
   /**
@@ -146,4 +193,32 @@ public class Rdio {
   public String call(String method) throws IOException {
     return call(method, new Parameters());
   }
+
+
+  /**
+   * An OAuth Consumer key and secret pair.
+   */
+  public static class Consumer {
+    public String key;
+    public String secret;
+
+    public Consumer(String key, String secret) {
+      this.key = key;
+      this.secret = secret;
+    }
+  }
+
+  /**
+   * An OAuth token and token secret pair.
+   */
+  public static class Token {
+    public String token;
+    public String secret;
+    
+    public Token(String token, String secret) {
+      this.token = token;
+      this.secret = secret;
+    }    
+  }
+
 }

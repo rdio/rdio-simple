@@ -15,15 +15,18 @@ include:
 Usage:
 To use the library just load the com.rdio.simple package:
   import com.rdio.simple.*;
-Create an Rdio instance passing in a tuple with your consumer key and secret:
-  Rdio rdio = new Rdio("consumerkey", "consumersecret");
+Create an Rdio instance passing in an Rdio.Consumer object:
+  Rdio rdio = new Rdio(new Rdio.Consumer("consumerkey", "consumersecret"));
 Make API calls with the call(methodname, params) method:
   rdio.call("get", Parameters.build("keys", "a254895,a104386"));
 Authenticate and authorize with the beginAuthentication and
 completeAuthentication methods.
 
-The current token (either request or access) is stored in rdio.token and
-rdio.tokenSecret.
+The current token (either request or access) is stored in rdio.token.
+
+The library is somewhat thread-safe. It's safe to call functions from any
+thread, but no API calls may be made in between beginAuthentication and
+completeAuthentication calls.
 
 Example:
 There is an example that uses the rdio-simple Java library to list a user's

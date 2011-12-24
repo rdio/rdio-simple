@@ -1,8 +1,14 @@
 package com.rdio.simple.examples;
 
-public abstract class ConsumerCredentials_EXAMPLE {
+import com.rdio.simple.Rdio;
+
+public class ConsumerCredentials_EXAMPLE extends Rdio.Consumer {
   // you can get these by signing up for a developer account at:
   // http://developer.rdio.com/
-  public static final String RDIO_CONSUMER_KEY = "";
-  public static final String RDIO_CONSUMER_SECRET = "";
+  private static final String RDIO_CONSUMER_KEY = "";
+  private static final String RDIO_CONSUMER_SECRET = "";
+
+  public ConsumerCredentials_EXAMPLE() {
+    super(RDIO_CONSUMER_KEY, RDIO_CONSUMER_SECRET);
+  }
 }

@@ -31,7 +31,7 @@ import com.rdio.simple.*;
 
 public final class CommandLine {
   public static void main(String[] args) throws IOException, JSONException {
-    Rdio rdio = new Rdio(ConsumerCredentials.RDIO_CONSUMER_KEY, ConsumerCredentials.RDIO_CONSUMER_SECRET);
+    Rdio rdio = new Rdio(new ConsumerCredentials());
 
     String url = rdio.beginAuthentication("oob");
     System.out.println("Go to: " + url);
