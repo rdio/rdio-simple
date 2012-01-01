@@ -31,14 +31,16 @@ import com.rdio.simple.*;
 
 public final class CommandLine {
   public static void main(String[] args) throws IOException, JSONException {
-    Rdio rdio = new Rdio(new ConsumerCredentials());
+    ConsumerCredentials consumerCredentials = new ConsumerCredentials();
+    Rdio rdio = new Rdio(consumerCredentials);
 
-    String url = rdio.beginAuthentication("oob");
-    System.out.println("Go to: " + url);
+    Rdio.AuthState authState = rdio.beginAuthentication("oob");
+    System.out.println("Go to: " + authState.url);
     System.out.print("Then enter the code: ");
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     String verifier = reader.readLine().trim();
-    rdio.completeAuthentication(verifier);
+    Rdio.Token accessToken = rdio.completeAuthentication(verifier, authState.requestToken);
+    rdio = new Rdio(consumerCredentials, accessToken);
 
     try {
       JSONObject response = new JSONObject(rdio.call("getPlaylists"));
