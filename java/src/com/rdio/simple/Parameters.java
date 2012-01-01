@@ -100,7 +100,7 @@ public class Parameters extends TreeMap<String, String> {
    */
   public String toPercentEncoded() {
     StringBuilder escaped = new StringBuilder();
-    Iterator<String> iter = navigableKeySet().iterator();
+    Iterator<String> iter = keySet().iterator();
     boolean first = true;
     while (iter.hasNext()) {
       if (!first) escaped.append('&');
@@ -120,7 +120,7 @@ public class Parameters extends TreeMap<String, String> {
    */
   public String toHeader() {
     StringBuilder header = new StringBuilder();
-    Iterator<String> iter = navigableKeySet().iterator();
+    Iterator<String> iter = keySet().iterator();
     boolean first = true;
     while (iter.hasNext()) {
       if (!first) header.append(", ");
@@ -195,7 +195,7 @@ public class Parameters extends TreeMap<String, String> {
    */
   public Parameters filter(Filter filter) {
     Parameters filtered = new Parameters();
-    for (String key : navigableKeySet()) {
+    for (String key : keySet()) {
       String value = get(key);
       if (filter.filter(key, value)) {
         filtered.put(key, value);
