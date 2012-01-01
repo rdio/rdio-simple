@@ -30,6 +30,7 @@ import java.util.Iterator;
 /**
  * An ordered dictionary of String key/value pairs for holding OAuth parameters.
  */
+@SuppressWarnings("UnusedDeclaration")
 public class Parameters extends TreeMap<String, String> {
   private static final long serialVersionUID = 1L;
 
@@ -82,8 +83,8 @@ public class Parameters extends TreeMap<String, String> {
       return params;
     }
     String[] encoded_params = percentEncoded.split("&");
-    for (int i = 0; i < encoded_params.length; i++) {
-      String[] pair = encoded_params[i].split("=", 2);
+    for (String encoded_param : encoded_params) {
+      String[] pair = encoded_param.split("=", 2);
       if (pair.length == 2) {
         params.put(percentDecode(pair[0]), percentDecode(pair[1]));
       } else {
