@@ -34,12 +34,17 @@
 #   method = "POST"
 #   realm = "Realm-for-authorization-header"
 
-#import time, random, hmac, hashlib, urllib, binascii, urlparse
-
 require 'uri'
 require 'cgi'
 require 'digest'
 require 'digest/sha1'
+
+if not "".respond_to?(:encoding)
+  # ruby 1.8 doesn't know about unicode :(
+  require 'iconv'
+  # we will just check that bytes are valid UTF-8
+  $__om_utf8_checker = Iconv.new("UTF-8", "UTF-8")
+end
 
 def om(consumer, url, post_params, token=nil, method='POST', realm=nil, timestamp=nil, nonce=nil)
   # A one-shot simple OAuth signature generator
@@ -93,16 +98,28 @@ def om(consumer, url, post_params, token=nil, method='POST', realm=nil, timestam
     # and the token secret in the HMAC-SHA1 key
     hmac_key += token[1]
   end
-
+  
   def percent_encode(s)
-    chars = s.chars.map do |c|
+    if s.respond_to?(:encoding)
+      # Ruby 1.9 knows about encodings, convert the string to UTF-8
+      s = s.encode(Encoding::UTF_8)
+    else
+      # Ruby 1.8 does not, just check that it's valid UTF-8
+      begin
+        $__om_utf8_checker.iconv(s)
+      rescue Iconv::IllegalSequence => exception
+        throw ArgumentError.new("Non-UTF-8 string: "+s.inspect)
+      end
+    end
+    chars = s.bytes.map do |b|
+      c = b.chr
       if ((c >= '0' and c <= '9') or
           (c >= 'A' and c <= 'Z') or
           (c >= 'a' and c <= 'z') or
           c == '-' or c == '.' or c == '_' or c == '~')
         c
       else
-        '%%%02X' % c.unpack('c')
+        '%%%02X' % b
       end
     end
     chars.join
@@ -117,7 +134,7 @@ def om(consumer, url, post_params, token=nil, method='POST', realm=nil, timestam
   signature_base_string = (percent_encode(method) +
                            '&' + percent_encode(url.to_s) +
                            '&' + percent_encode(normalized_params))
-
+  
   # HMAC-SHA1
   hmac = Digest::HMAC.new(hmac_key, Digest::SHA1)
   hmac.update(signature_base_string)
