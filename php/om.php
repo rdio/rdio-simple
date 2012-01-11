@@ -64,7 +64,8 @@ function om($consumer, $url, $params, $token=NULL, $method='POST', $realm=NULL, 
   # add query-string params (if any) to the params list since they must be
   # included in the signature
   if (array_key_exists('query', $parts)) {
-    parse_str($parts['query'], $params);
+    parse_str($parts['query'], $url_params);
+    $params = array_merge($params, $url_params);
   }
 
   # add OAuth params

@@ -56,7 +56,7 @@ def om(consumer, url, post_params, token=None, method='POST', realm=None, timest
 
   # normalize the URL
   parts = urlparse.urlparse(url)
-  scheme, netloc, path, query = parts[:4]
+  scheme, netloc, path, _, query = parts[:5]
   # Exclude default port numbers.
   if scheme == 'http' and netloc[-3:] == ':80':
       netloc = netloc[:-3]
