@@ -6,7 +6,7 @@ from om import om
 
 consumer = (sys.argv[1], sys.argv[2])
 url = sys.argv[3]
-params = urlparse.parse_qsl(sys.argv[4])
+params = [(k.decode('UTF-8'),v.decode('UTF-8')) for k, v in urlparse.parse_qsl(sys.argv[4])]
 if sys.argv[5] != '' and sys.argv[6] != '':
   token = (sys.argv[5], sys.argv[6])
 else:

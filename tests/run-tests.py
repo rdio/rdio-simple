@@ -61,10 +61,16 @@ def test(consumer,
 test(('a','b'), 'http://www.example.com/', {})
 test(('a','b'), 'Http://www.example.com/', {})
 test(('a','b'), 'http://www.EXAMPLE.com/', {})
+test(('a','b'), 'http://www.example.com/~test/', {})
+test(('a','b'), 'http://www.example.com/'+urllib.quote(u'fran\xe7ais'.encode('UTF-8')), {})
 test(('a','b'), 'http://www.example.com/', {'test':'thing', 'other':'test'})
 test(('a','b'), 'http://www.example.com/', {'test':'thing', 'TEST':'foo'})
+test(('a','b'), 'http://www.example.com/', {'language':u'Fran\xe7ais'.encode('UTF-8')})
 test(('a','b'), 'http://www.example.com/', {},
     token=('to','ken'))
 test(('a','b'), 'http://www.example.com/', {'test':'thing', 'other':'test'},
     token=('to','ken'))
-#test(('a','b'), 'http://www.example.com/?foo=bar', {'test':'thing', 'other':'test'})
+test(('a','b'), 'https://www.example.com/', {'test':'thing', 'other':'test'},
+    token=('to','ken'))
+test(('a','b'), 'http://www.example.com/', {'oauth_callback':'https://www.example.com/my/callback'})
+test(('a','b'), 'http://www.example.com/?foo=bar', {'test':'thing', 'other':'test'})
