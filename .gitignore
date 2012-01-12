@@ -8,5 +8,7 @@ ruby/examples/rdio_consumer_credentials.rb
 node/examples/rdio_consumer_credentials.js
 node/node_modules
 java/examples/com/rdio/simple/examples/ConsumerCredentials.java
+c-sharp/Examples/RdioConsumerCredentials.cs
 .idea
 *.iml
+*.exe
