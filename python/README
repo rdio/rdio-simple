@@ -2,7 +2,7 @@ rdio-simple for Python
 
 An Rdio client including a built-in OAuth implementation.
 
-This has library only depends on libraries included by default in recent
+This library only depends on libraries included by default in recent
 versions of Python. It has been tested with Python 2.6.
 
 To install the library simply add the om.py and rdio.py files to your source
