@@ -32,25 +32,29 @@ import com.rdio.simple.*;
 public final class CommandLine {
   public static void main(String[] args) throws IOException, JSONException {
     ConsumerCredentials consumerCredentials = new ConsumerCredentials();
-    Rdio rdio = new Rdio(consumerCredentials);
-
-    Rdio.AuthState authState = rdio.beginAuthentication("oob");
-    System.out.println("Go to: " + authState.url);
-    System.out.print("Then enter the code: ");
-    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    String verifier = reader.readLine().trim();
-    Rdio.Token accessToken = rdio.completeAuthentication(verifier, authState.requestToken);
-    rdio = new Rdio(consumerCredentials, accessToken);
-
+    RdioClient rdio = new RdioCoreClient(consumerCredentials);
+    
     try {
-      JSONObject response = new JSONObject(rdio.call("getPlaylists"));
-      JSONArray playlists = (JSONArray)((JSONObject)response.get("result")).get("owned");
-      for (int i=0; i<playlists.length(); i++) {
-        JSONObject playlist = playlists.getJSONObject(i);
-        System.out.println(playlist.getString("shortUrl") + "\t" + playlist.getString("name"));
+      RdioClient.AuthState authState = rdio.beginAuthentication("oob");
+      System.out.println("Go to: " + authState.url);
+      System.out.print("Then enter the code: ");
+      BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+      String verifier = reader.readLine().trim();
+      RdioClient.Token accessToken = rdio.completeAuthentication(verifier, authState.requestToken);
+      rdio = new RdioCoreClient(consumerCredentials, accessToken);
+  
+      try {
+        JSONObject response = new JSONObject(rdio.call("getPlaylists"));
+        JSONArray playlists = (JSONArray)((JSONObject)response.get("result")).get("owned");
+        for (int i=0; i<playlists.length(); i++) {
+          JSONObject playlist = playlists.getJSONObject(i);
+          System.out.println(playlist.getString("shortUrl") + "\t" + playlist.getString("name"));
+        }
+      } catch(IOException e) {
+        e.printStackTrace();
       }
-    } catch(IOException e) {
-      e.printStackTrace();
+    } catch(RdioClient.RdioException e) {
+      System.err.println("Rdio Error: "+e.toString());
     }
   }
 

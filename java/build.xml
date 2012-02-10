@@ -1,12 +1,16 @@
 <project>
+  <path id="classpath">
+    <fileset dir="lib" includes="**/*.jar"/>
+  </path>
+
   <target name="clean">
     <delete dir="classes"/>
   </target>
 
   <target name="compile">
     <mkdir dir="classes"/>
-    <javac srcdir="src" destdir="classes" debug="true"/>
-    <javac srcdir="examples" destdir="classes/" debug="true"/>
+    <javac srcdir="src" destdir="classes" debug="true" classpathref="classpath"/>
+    <javac srcdir="examples" destdir="classes/" debug="true" classpathref="classpath"/>
   </target>
 
   <target name="command-line" depends="compile">
