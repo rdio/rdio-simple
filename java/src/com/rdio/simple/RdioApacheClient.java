@@ -34,7 +34,7 @@ public class RdioApacheClient extends RdioClient {
 		HttpPost post = new HttpPost(url);
 
 		post.setEntity(new StringEntity(params.toPercentEncoded()));
-		post.addHeader("Cache-Control", "no-tranform");
+		post.addHeader("Cache-Control", "no-transform");
 		post.addHeader("Authorization", auth);
 		post.addHeader("Content-type", "application/x-www-form-urlencoded");
 
