@@ -23,9 +23,9 @@ package com.rdio.simple;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Iterator;
 
 /**
  * An ordered dictionary of String key/value pairs for holding OAuth parameters.

@@ -24,16 +24,15 @@ package com.rdio.simple;
  */
 
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Random;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public abstract class Om {
   /**

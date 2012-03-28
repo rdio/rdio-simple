@@ -69,8 +69,8 @@ public abstract class RdioClient {
    * @param params         the parameters to post
    * @param token          the token to sign the call with
    * @return               the response body
-   * @throws IOException   in the event of any network errors
-   * @throws RdioException 
+   * @throws java.io.IOException   in the event of any network errors
+   * @throws RdioException
    */
   protected abstract String signedPost(String url, Parameters params, Token token) throws IOException, AuthorizationException, RdioException;
 
@@ -79,7 +79,7 @@ public abstract class RdioClient {
    * Store it on this Rdio object.
    * @param callback     the callback URL or "oob" for the PIN flow
    * @return             the request token and the authorization URL to direct a user to
-   * @throws IOException in the event of any network errors
+   * @throws java.io.IOException in the event of any network errors
    */
   public AuthState beginAuthentication(String callback) throws IOException, RdioException {
     String response = signedPost("http://api.rdio.com/oauth/request_token",
@@ -95,7 +95,7 @@ public abstract class RdioClient {
    * method. When the authentication is complete the access token will be stored on this Rdio object.
    * @param verifier     the oauth_verifier from the callback or the PIN displayed to the user
    * @param requestToken the request token returned from the beginAuthentication call
-   * @throws IOException in the event of any network errors
+   * @throws java.io.IOException in the event of any network errors
    * @return             the access token. pass it to an Rdio constructor to make authenticated calls
    */
   public Token completeAuthentication(String verifier, Token requestToken) throws IOException, RdioException {
@@ -110,7 +110,7 @@ public abstract class RdioClient {
    * @param method       the name of the method
    * @param parameters   the parameters of the method
    * @return             the response JSON text
-   * @throws IOException in the event of any network errors
+   * @throws java.io.IOException in the event of any network errors
    */
   public String call(String method, Parameters parameters) throws IOException, RdioException {
     parameters = (Parameters)parameters.clone();
@@ -122,7 +122,7 @@ public abstract class RdioClient {
    * Make and Rdio API call with no parameters.
    * @param method       the name of the method
    * @return             the response JSON text
-   * @throws IOException in the event of any network errors
+   * @throws java.io.IOException in the event of any network errors
    */
   public String call(String method) throws IOException, RdioException {
     return call(method, new Parameters());

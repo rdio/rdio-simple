@@ -23,8 +23,8 @@ public class RdioCoreClient extends RdioClient {
 	 * @param params         the parameters to post
 	 * @param token          the token to sign the call with
 	 * @return               the response body
-	 * @throws IOException   in the event of any network errors
-	 * @throws RdioException 
+	 * @throws java.io.IOException   in the event of any network errors
+	 * @throws com.rdio.simple.RdioClient.RdioException
 	 */
 	protected String signedPost(String url, Parameters params, Token token) throws IOException, AuthorizationException, RdioException {
 		String auth;
@@ -44,7 +44,6 @@ public class RdioCoreClient extends RdioClient {
 			OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
 			writer.write(postBody);
 			writer.close();
-			InputStreamReader reader = new InputStreamReader(connection.getInputStream());
 			int responseCode = connection.getResponseCode();
 			if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
 				throw new AuthorizationException(connection.getResponseMessage());
@@ -52,6 +51,7 @@ public class RdioCoreClient extends RdioClient {
 				throw new RdioException("Unexpected response: "+responseCode+" "+connection.getResponseMessage());
 			}
 			int length = connection.getContentLength();
+                        InputStreamReader reader = new InputStreamReader(connection.getInputStream());
 			char[] chars = new char[length];
 			int offset = 0;
 			int count;
