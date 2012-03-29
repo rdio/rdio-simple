@@ -5,6 +5,7 @@
 
   <target name="clean">
     <delete dir="classes"/>
+    <delete dir="docs"/>
   </target>
 
   <target name="compile">
@@ -17,5 +18,13 @@
     <java classpath="classes/" classname="com.rdio.simple.examples.CommandLine" fork="yes"/>
   </target>
 
-  <target name="default" depends="compile"></target>
+  <target name="docs">
+      <mkdir dir="docs"/>
+      <javadoc sourcepath="src" destdir="docs" classpathref="classpath">
+          <link href="http://docs.oracle.com/javase/6/docs/api/"/>
+          <link href="http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/"/>
+      </javadoc>
+  </target>
+
+  <target name="default" depends="compile"/>
 </project>

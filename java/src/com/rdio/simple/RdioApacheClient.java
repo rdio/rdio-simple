@@ -11,6 +11,14 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
+/**
+ * An RdioClient that uses the Apache HttpClient.
+ *
+ * To customize the HttpClient to be used subclass RdioApacheClient and
+ * override signedPost(String url, Parameters params, RdioClient.Token token)
+ * to call signedPost(String url, Parameters params, RdioClient.Token token, HttpClient client)
+ * with a specific HttpClient.
+ */
 public class RdioApacheClient extends RdioClient {
 	public RdioApacheClient(RdioClient.Consumer consumer) {
 		super(consumer);
@@ -23,7 +31,16 @@ public class RdioApacheClient extends RdioClient {
 	protected String signedPost(String url, Parameters params, RdioClient.Token token) throws IOException, RdioException {
 		return signedPost(url, params, token, new DefaultHttpClient());
 	}
-	
+
+        /** Make a signed POST with a specific HttpClient.
+         * @param url            the URL to POST to
+         * @param params         the parameters to post
+         * @param token          the token to sign the call with
+         * @param client         the HttpClient to use
+         * @return               the response body
+         * @throws IOException   in the event of any network errors
+         * @throws RdioException in the event of an Rdio protocol error
+         */
 	protected String signedPost(String url, Parameters params, RdioClient.Token token, HttpClient client) throws IOException, RdioException {	
 	    String auth;
 	    if (token == null) {

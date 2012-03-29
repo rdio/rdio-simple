@@ -23,7 +23,10 @@ package com.rdio.simple;
 
 import java.io.IOException;
 
-@SuppressWarnings("UnusedDeclaration")
+/**
+ * The base class for all Rdio clients. It implements the method calling
+ * and auth but does not actually make HTTP requests.
+ */
 public abstract class RdioClient {
   protected final Consumer consumer;
   protected final Token accessToken;
@@ -69,17 +72,17 @@ public abstract class RdioClient {
    * @param params         the parameters to post
    * @param token          the token to sign the call with
    * @return               the response body
-   * @throws java.io.IOException   in the event of any network errors
-   * @throws RdioException
+   * @throws IOException   in the event of any network errors
+   * @throws RdioException in the event of an Rdio protocol error
    */
-  protected abstract String signedPost(String url, Parameters params, Token token) throws IOException, AuthorizationException, RdioException;
+  protected abstract String signedPost(String url, Parameters params, Token token) throws IOException, RdioException;
 
   /**
    * Begin the authentication process. Fetch an OAuth request token associated with the supplied callback.
-   * Store it on this Rdio object.
    * @param callback     the callback URL or "oob" for the PIN flow
    * @return             the request token and the authorization URL to direct a user to
-   * @throws java.io.IOException in the event of any network errors
+   * @throws IOException in the event of any network errors
+   * @throws RdioException in the event of an Rdio protocol error
    */
   public AuthState beginAuthentication(String callback) throws IOException, RdioException {
     String response = signedPost("http://api.rdio.com/oauth/request_token",
@@ -91,12 +94,13 @@ public abstract class RdioClient {
   }
 
   /**
-   * Complete the authentication process. This Rdio object should have the request token from the beginAuthentication
-   * method. When the authentication is complete the access token will be stored on this Rdio object.
-   * @param verifier     the oauth_verifier from the callback or the PIN displayed to the user
-   * @param requestToken the request token returned from the beginAuthentication call
-   * @throws java.io.IOException in the event of any network errors
-   * @return             the access token. pass it to an Rdio constructor to make authenticated calls
+   * Complete the authentication process using the verifier returned from the
+   * Rdio servers and the request token returned from @{link beginAuthentication}.
+   * @param verifier       the oauth_verifier from the callback or the PIN displayed to the user
+   * @param requestToken   the request token returned from the beginAuthentication call
+   * @throws IOException   in the event of any network errors
+   * @throws RdioException in the event of an Rdio protocol error
+   * @return               the access token. Pass it to an RdioClient constructor to make authenticated calls
    */
   public Token completeAuthentication(String verifier, Token requestToken) throws IOException, RdioException {
     String response = signedPost("http://api.rdio.com/oauth/access_token",
@@ -107,10 +111,11 @@ public abstract class RdioClient {
 
   /**
    * Make and Rdio API call.
-   * @param method       the name of the method
-   * @param parameters   the parameters of the method
-   * @return             the response JSON text
-   * @throws java.io.IOException in the event of any network errors
+   * @param method         the name of the method
+   * @param parameters     the parameters of the method
+   * @return               the response JSON text
+   * @throws IOException   in the event of any network errors
+   * @throws RdioException in the event of an Rdio protocol error
    */
   public String call(String method, Parameters parameters) throws IOException, RdioException {
     parameters = (Parameters)parameters.clone();
@@ -120,9 +125,10 @@ public abstract class RdioClient {
 
   /**
    * Make and Rdio API call with no parameters.
-   * @param method       the name of the method
-   * @return             the response JSON text
-   * @throws java.io.IOException in the event of any network errors
+   * @param method         the name of the method
+   * @return               the response JSON text
+   * @throws IOException   in the event of any network errors
+   * @throws RdioException in the event of an Rdio protocol error
    */
   public String call(String method) throws IOException, RdioException {
     return call(method, new Parameters());
@@ -133,9 +139,15 @@ public abstract class RdioClient {
    * An OAuth Consumer key and secret pair.
    */
   public static class Consumer {
+    /** The OAuth consumer key */
     public final String key;
+    /** The OAuth consumer secret */
     public final String secret;
 
+    /**
+     * @param key    the OAuth consumer key
+     * @param secret the OAuth consumer secret
+     */
     public Consumer(String key, String secret) {
       this.key = key;
       this.secret = secret;
@@ -147,9 +159,15 @@ public abstract class RdioClient {
    * An OAuth token and token secret pair.
    */
   public static final class Token {
+    /** The OAuth token */
     public final String token;
+    /** The OAuth token secret */
     public final String secret;
-    
+
+    /**
+     * @param token  the OAuth token
+     * @param secret the OAuth token secret
+     */
     public Token(String token, String secret) {
       this.token = token;
       this.secret = secret;
@@ -161,23 +179,37 @@ public abstract class RdioClient {
    * Intermediate state for OAuth authorization.
    */
   public static final class AuthState {
+    /** The OAuth request token.
+     * This will be passed to completeAuthentication.
+     */
     public final Token requestToken;
+    /** The OAuth authorization URL.
+     * Redirect the user to this URL to approve the app.
+     */
     public final String url;
+    /**
+     * @param requestToken the OAuth request token
+     * @param url          the authorization URL
+     */
     public AuthState(Token requestToken, String url) {
       this.requestToken = requestToken;
       this.url = url;
     }
   }
-  
-  
+
+  /**
+   * An Rdio protocol error.
+   */
   public static class RdioException extends Exception {
 	public RdioException(String error) {
       super(error);
     }
 	private static final long serialVersionUID = -6660585967984993916L;
   }
-  
-  
+
+  /**
+   * Authentication was denied.
+   */
   public static class AuthorizationException extends RdioException {
     public AuthorizationException(String error) {
       super(error);

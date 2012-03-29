@@ -7,6 +7,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * An RdioClient that uses java.net.HttpURLConnection.
+ */
 public class RdioCoreClient extends RdioClient {
 
 	public RdioCoreClient(Consumer consumer) {

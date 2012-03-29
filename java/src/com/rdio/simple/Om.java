@@ -34,7 +34,10 @@ import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Random;
 
-public abstract class Om {
+/**
+ * A straight-forward implementation of OAuth 1.0a message signing.
+ */
+public final class Om {
   /**
    * Sign an OAuth request.
    * @param consumerKey    the OAuth consumer key
@@ -204,6 +207,14 @@ public abstract class Om {
     base64_map[i] = '/';
   }
 
+  /**
+   * Encode bytes in Base 64.
+   * Based on:
+   * http://www.source-code.biz/base64coder/java/Base64Coder.java.txt
+   *
+   * @param in the bytes to encode
+   * @return Base 64 encoded characters
+   */
   public static char[] base64(byte[] in) {
     int iLen = in.length;
     int oDataLen = (iLen * 4 + 2) / 3;       // output length without padding
@@ -229,5 +240,6 @@ public abstract class Om {
     return out;
   }
 
-
+  /* no, you can't construct this */
+  private Om() { }
 }
