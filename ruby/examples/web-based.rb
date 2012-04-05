@@ -25,7 +25,7 @@ require 'uri'
 
 $LOAD_PATH << '../'
 require 'rdio'
-require 'rdio_consumer_credentials'
+require './rdio_consumer_credentials'
 
 enable :sessions
 
