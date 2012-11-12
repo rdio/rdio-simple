@@ -36,8 +36,8 @@ Examples
 Both examples authenticate and then list the user's playlists. They use
 credentials stored in `rdio-consumer-credentials.py`.
 
-  examples/command-line.py
-  examples/web-based.py
+* [examples/command-line.py](https://github.com/rdio/rdio-simple/blob/master/python/examples/web-based.py)
+* [examples/web-based.py](https://github.com/rdio/rdio-simple/blob/master/python/examples/web-based.py)
 
-**NOTE:** web-based.py depends on web.py (http://www.webpy.org/)
+**NOTE:** `web-based.py` depends on [web.py](http://www.webpy.org/)
 
