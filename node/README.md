@@ -35,10 +35,12 @@ Examples
 Both examples authenticate and then list the user's playlists. They use
 credentials stored in `rdio_consumer_credentials.js`.
  
-  examples/command-line.js
-  examples/web-based.js
+* [examples/command-line.js](https://github.com/rdio/rdio-simple/blob/master/node/examples/command-line.js)
+* [examples/web-based.js](https://github.com/rdio/rdio-simple/blob/master/node/examples/web-based.js)
 
 **NOTE:** `web-based.js` depends on [Link](http://linkjs.org/). Install the dependency
 in the examples directory by running:
 
-  npm install link
+```bash
+npm install link
+```
