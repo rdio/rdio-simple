@@ -43,5 +43,5 @@ Examples
 Both examples authenticate and then list the user's playlists. They use
 credentials stored in `rdio-consumer-credentials.php`.
 
-  examples/command-line.php
-  examples/web-based.php
+* [examples/command-line.php](https://github.com/rdio/rdio-simple/blob/master/php/examples/command-line.php)
+* [examples/web-based.php](https://github.com/rdio/rdio-simple/blob/master/php/examples/web-based.php)
