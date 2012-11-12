@@ -18,11 +18,9 @@ The main class that you'll interact with is `Rdio.Simple.RdioClient`. It's an
 immutable class that holds the Rdio consumer key and secret, and optionally
 an OAuth access token:
 ```c#
-RdioClient anon = new RdioClient(
-  new RdioClient.Consumer("consumerkey", "consumersecret"));
-RdioClient authed = new RdioClient(
-  new RdioClient.Consumer("consumerkey", "consumersecret"),
-  new RdioClient.Token("accesstoken", "accesstokensecret"));
+RdioClient anon = new RdioClient(new RdioClient.Consumer("consumerkey", "consumersecret"));
+RdioClient authed = new RdioClient(new RdioClient.Consumer("consumerkey", "consumersecret"),
+                                   new RdioClient.Token("accesstoken", "accesstokensecret"));
 ```
 
 The Call method on RdioClient makes API calls. A string containing the full
@@ -43,8 +41,8 @@ a callback URL (or "oob" to use the PIN flow):
 RdioClient.AuthState state = rdioClient.BeginAuthentication("http://example.com/callback");
 ```
 
-The `RdioClient.AuthState` object has an Url that the user should be directed
-to to approve the application and a RequestToken that should be saved for the
+The `RdioClient.AuthState` object has an `Url` that the user should be directed
+to to approve the application and a `RequestToken` that should be saved for the
 next step in the process.
 
 When the callback URL is loaded (or the user has entered the PIN) call
@@ -61,6 +59,7 @@ rdioClient = new RdioClient(rdioClient.Consumer, accessToken)
 
 There is an example in the [Examples](https://github.com/rdio/rdio-simple/tree/master/c-sharp/Examples)
 directory that authenticates a user and then lists their playlists.
+
 To use it make a copy of the `RdioConsumerCredentialsEXAMPLE.cs` as
 `RdioConsumerCredentials.cs` and fill in valid application
 credentials from http://developer.rdio.com/.
