@@ -28,7 +28,7 @@ Rdio.prototype.beginAuthentication = function beginAuthentication(callbackUrl, c
             callback(null, authUrl);
         }
     });
-}
+};
 
 Rdio.prototype.completeAuthentication = function completeAuthentication(verifier, callback) {
     var self = this;
@@ -47,7 +47,7 @@ Rdio.prototype.completeAuthentication = function completeAuthentication(verifier
             callback(null);
         }
     });
-}
+};
 
 Rdio.prototype.call = function call(method, params, callback) {
     if (typeof params == "function") {
@@ -72,7 +72,7 @@ Rdio.prototype.call = function call(method, params, callback) {
             callback(null, JSON.parse(body));
         }
     });
-}
+};
 
 Rdio.prototype._signedPost = function signedPost(urlString, params, callback) {
     var auth = om(this.consumer, urlString, params, this.token);
@@ -108,4 +108,4 @@ Rdio.prototype._signedPost = function signedPost(urlString, params, callback) {
     });
 
     req.end(content);
-}
+};
