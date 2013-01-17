@@ -99,7 +99,16 @@ Rdio.prototype._signedPost = function signedPost(urlString, params, callback) {
         });
 
         res.on("end", function () {
-            callback(null, body);
+            var statusCode = res.statusCode;
+            if (statusCode != 200) {
+                var err = {
+                  statusCode: statusCode,
+                  body: body
+                };
+                callback(err);
+            } else {
+                callback(null, body);
+            }
         });
     });
 
