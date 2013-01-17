@@ -91,16 +91,21 @@ Rdio.prototype._signedPost = function signedPost(urlString, params, callback) {
         }
     }, function (res) {
         var body = "";
-
+        var statusCode = res.statusCode;
+        
         res.setEncoding("utf8");
+        
+        if(statusCode !== 200) {
+          callback({message: 'Server returned status code ' + statusCode});
+        } else {
+          res.on("data", function (chunk) {
+              body += chunk;
+          });
 
-        res.on("data", function (chunk) {
-            body += chunk;
-        });
-
-        res.on("end", function () {
-            callback(null, body);
-        });
+          res.on("end", function () {
+              callback(null, body);
+          });
+        }
     });
 
     req.on("error", function (err) {
