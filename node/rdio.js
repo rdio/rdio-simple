@@ -101,11 +101,7 @@ Rdio.prototype._signedPost = function signedPost(urlString, params, callback) {
         res.on("end", function () {
             var statusCode = res.statusCode;
             if (statusCode != 200) {
-                var err = {
-                  statusCode: statusCode,
-                  body: body
-                };
-                callback(err);
+                callback(res);
             } else {
                 callback(null, body);
             }
