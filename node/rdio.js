@@ -67,7 +67,7 @@ Rdio.prototype.call = function call(method, params, callback) {
 
     this._signedPost("http://api.rdio.com/1/", copy, function (err, body) {
         if (err) {
-            callback(err, null);
+            callback(err);
         } else {
             callback(null, JSON.parse(body));
         }
@@ -91,21 +91,26 @@ Rdio.prototype._signedPost = function signedPost(urlString, params, callback) {
         }
     }, function (res) {
         var body = "";
-        var statusCode = res.statusCode;
         
         res.setEncoding("utf8");
         
-        if(statusCode !== 200) {
-          callback({message: 'Server returned status code ' + statusCode});
-        } else {
-          res.on("data", function (chunk) {
-              body += chunk;
-          });
+        res.on("data", function (chunk) {
+            body += chunk;
+        });
 
-          res.on("end", function () {
-              callback(null, body);
-          });
-        }
+        res.on("end", function () {
+            var data = {};
+            
+            try {
+                data = JSON.parse(body);
+            } catch(e) {}
+            
+            if (data.status === 'error') {
+                callback(data.message);
+            } else {
+                callback(null, body);
+            }
+        });
     });
 
     req.on("error", function (err) {
