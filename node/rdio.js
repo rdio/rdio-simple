@@ -67,7 +67,7 @@ Rdio.prototype.call = function call(method, params, callback) {
 
     this._signedPost("http://api.rdio.com/1/", copy, function (err, body) {
         if (err) {
-            callback(err, null);
+            callback(err);
         } else {
             callback(null, JSON.parse(body));
         }
@@ -91,15 +91,28 @@ Rdio.prototype._signedPost = function signedPost(urlString, params, callback) {
         }
     }, function (res) {
         var body = "";
-
+        
         res.setEncoding("utf8");
-
+        
         res.on("data", function (chunk) {
             body += chunk;
         });
 
         res.on("end", function () {
-            callback(null, body);
+            var data = {};
+            
+            try {
+                data = JSON.parse(body);
+            } catch(e) {
+                data.status = 'error';
+                data.message = body;
+            }
+
+            if (data.status === 'error') {
+                callback(data.message);
+            } else {
+                callback(null, body);
+            }
         });
     });
 
