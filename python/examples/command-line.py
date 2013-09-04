@@ -24,11 +24,11 @@ import sys,os.path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from rdio import Rdio
-from rdio_consumer_credentials import *
+from rdio_consumer_credentials import RDIO_CREDENTIALS
 from urllib2 import HTTPError
 
 # create an instance of the Rdio object with our consumer credentials
-rdio = Rdio((RDIO_CONSUMER_KEY, RDIO_CONSUMER_SECRET))
+rdio = Rdio(RDIO_CREDENTIALS)
 
 try:
   # authenticate against the Rdio service
