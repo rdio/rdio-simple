@@ -26,7 +26,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # import the rdio-simple library
 from rdio import Rdio
 # and our example credentials
-from rdio_consumer_credentials import *
+from rdio_consumer_credentials import RDIO_CREDENTIALS
 
 # import web.py
 import web
@@ -46,7 +46,7 @@ class root:
     access_token = web.cookies().get('at')
     access_token_secret = web.cookies().get('ats')
     if access_token and access_token_secret:
-      rdio = Rdio((RDIO_CONSUMER_KEY, RDIO_CONSUMER_SECRET),
+      rdio = Rdio(RDIO_CREDENTIALS,
         (access_token, access_token_secret))
       # make sure that we can make an authenticated call
 
@@ -82,7 +82,7 @@ class login:
     web.setcookie('rt', '', expires=-1)
     web.setcookie('rts', '', expires=-1)
     # begin the authentication process
-    rdio = Rdio((RDIO_CONSUMER_KEY, RDIO_CONSUMER_SECRET))
+    rdio = Rdio(RDIO_CREDENTIALS)
     url = rdio.begin_authentication(callback_url = web.ctx.homedomain+'/callback')
     # save our request token in cookies
     web.setcookie('rt', rdio.token[0], expires=60*60*24) # expires in one day
@@ -99,7 +99,7 @@ class callback:
     # make sure we have everything we need
     if request_token and request_token_secret and verifier:
       # exchange the verifier and request token for an access token
-      rdio = Rdio((RDIO_CONSUMER_KEY, RDIO_CONSUMER_SECRET),
+      rdio = Rdio(RDIO_CREDENTIALS,
         (request_token, request_token_secret))
       rdio.complete_authentication(verifier)
       # save the access token in cookies (and discard the request token)
