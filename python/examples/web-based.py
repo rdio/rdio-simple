@@ -99,7 +99,7 @@ class callback:
     # make sure we have everything we need
     if request_token and request_token_secret and verifier:
       # exchange the verifier and request token for an access token
-      rdio = Rdio(RDIO_CREDENTIALS
+      rdio = Rdio(RDIO_CREDENTIALS,
         (request_token, request_token_secret))
       rdio.complete_authentication(verifier)
       # save the access token in cookies (and discard the request token)
