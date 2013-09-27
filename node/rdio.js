@@ -104,10 +104,14 @@ Rdio.prototype._signedPost = function signedPost(urlString, params, callback) {
             try {
                 data = JSON.parse(body);
             } catch(e) {
-                data.status = 'error';
-                data.message = body;
-            }
+                data = qs.parse(body);
 
+                if(!data.oauth_token) {
+                    data.status = 'error';
+                    data.message = body;
+                }
+            }
+            
             if (data.status === 'error') {
                 callback(data.message);
             } else {
