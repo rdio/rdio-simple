@@ -1,0 +1,16 @@
+{
+  "name": "Rdio-Simple-Node",
+  "version": "0.0.0",
+  "description": "Some Rdio API examples using node.js.",
+  "main": "web-based.js",
+  "dependencies": {
+    "hapi": "~1.20.0",
+    "yar": "~0.4.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rdio",
+  "license": "BSD-2-Clause"
+}
