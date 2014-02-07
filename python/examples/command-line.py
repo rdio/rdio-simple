@@ -20,12 +20,24 @@
 # THE SOFTWARE.
 
 # include the parent directory in the Python path
+
+from __future__ import unicode_literals
+
 import sys,os.path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from rdio import Rdio
 from rdio_consumer_credentials import RDIO_CREDENTIALS
-from urllib2 import HTTPError
+try:
+    from urllib.error import HTTPError
+except ImportError:
+    from urllib2 import HTTPError
+
+# Fix for Python 2.X
+try:
+    input = raw_input
+except NameError:
+    pass
 
 # create an instance of the Rdio object with our consumer credentials
 rdio = Rdio(RDIO_CREDENTIALS)
@@ -33,8 +45,8 @@ rdio = Rdio(RDIO_CREDENTIALS)
 try:
   # authenticate against the Rdio service
   url = rdio.begin_authentication('oob')
-  print 'Go to: ' + url
-  verifier = raw_input('Then enter the code: ').strip()
+  print('Go to: ' + url)
+  verifier = input('Then enter the code: ').strip()
   rdio.complete_authentication(verifier)
 
   # find out what playlists you created
@@ -42,7 +54,7 @@ try:
 
   # list them
   for playlist in myPlaylists:
-    print '%(shortUrl)s\t%(name)s' % playlist
-except HTTPError, e:
+    print('%(shortUrl)s\t%(name)s' % playlist)
+except HTTPError as e:
   # if we have a protocol error, print it
-  print e.read()
+  print(e.read())

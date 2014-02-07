@@ -17,24 +17,36 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+from __future__ import unicode_literals
+
 from om import om
-import urllib2, urllib
-from urlparse import parse_qsl
 try:
-  import json
+    from urllib.request import urlopen, Request
+    from urllib.parse import urlencode
+    from urllib.parse import parse_qsl
 except ImportError:
-  import simplejson as json
+    from urllib2 import urlopen, Request
+    from urllib import urlencode
+    from urlparse import parse_qsl
+
+import json
 
 class Rdio:
   def __init__(self, consumer, token=None):
     self.__consumer = consumer
     self.token = token
+    self.content_type = 'application/x-www-form-urlencoded;charset=utf-8'
 
   def __signed_post(self, url, params):
     auth = om(self.__consumer, url, params, self.token)
-    req = urllib2.Request(url, urllib.urlencode(params), {'Authorization': auth})
-    res = urllib2.urlopen(req)
-    return res.read()
+    # Second parameter to Request should be a bytes (Python3) or str (Python2)
+    # Since we are using unicode everywhere, we should do an encode
+    # and set Content-Type header accordingly
+    req = Request(url, urlencode(params).encode('utf-8'),
+                  {'Authorization': auth, 'Content-Type': self.content_type})
+    res = urlopen(req)
+    # return unicode instead of bytes
+    return res.read().decode('utf-8')
 
   def begin_authentication(self, callback_url):
     # request a request token from the server
