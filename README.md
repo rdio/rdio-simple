@@ -9,7 +9,7 @@ These libraries for Python, PHP, Ruby, Node.js and Java implement the subset
 of OAuth that is required to talk to the Rdio service with minimal external
 dependencies.
 
-Documentation is at: http://developer.rdio.com/docs/read/rest/rdiosimple
+Documentation is at: http://www.rdio.com/developers/docs/libraries/simple/
 Examples for each language are under each language directory.
 
 Testing
