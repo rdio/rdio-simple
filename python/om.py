@@ -40,7 +40,20 @@ Optional additional arguments are:
   nonce = oauth nonce - otherwise auto generated
 """
 
-import time, random, hmac, hashlib, urllib, binascii, urlparse
+from __future__ import unicode_literals
+
+import time, random, hmac, hashlib, binascii
+
+try:
+    from urllib.parse import urlparse, parse_qsl, quote
+except ImportError:
+    from urlparse import urlparse, parse_qsl
+    from urllib import quote
+
+import sys
+
+PY3 = (sys.version_info >= (3, 0, 0))
+
 
 def om(consumer, url, post_params, token=None, method='POST', realm=None, timestamp=None, nonce=None):
   """A one-shot simple OAuth signature generator"""
@@ -52,10 +65,10 @@ def om(consumer, url, post_params, token=None, method='POST', realm=None, timest
   if isinstance(post_params, list):
     params = list(post_params) # copy the params list since we'll be messing with it
   else:
-    params = post_params.items()
+    params = list(post_params.items())
 
   # normalize the URL
-  parts = urlparse.urlparse(url)
+  parts = urlparse(url)
   scheme, netloc, path, _, query = parts[:5]
   # Exclude default port numbers.
   if scheme == 'http' and netloc[-3:] == ':80':
@@ -66,7 +79,7 @@ def om(consumer, url, post_params, token=None, method='POST', realm=None, timest
   normalized_url = '%s://%s%s' % (scheme, netloc, path)
 
   # add query-string params (if any) to the params list
-  params.extend(urlparse.parse_qsl(query))
+  params.extend(parse_qsl(query))
 
   # add OAuth params
   params.extend([
@@ -89,7 +102,7 @@ def om(consumer, url, post_params, token=None, method='POST', realm=None, timest
   # Sort lexicographically, first after key, then after value.
   params.sort()
   # UTF-8 and escape the key/value pairs
-  def escape(s): return urllib.quote(unicode(s).encode('utf-8'), safe='~')
+  def escape(s): return quote(s.encode('utf-8'), safe='~')
   params = [(escape(k), escape(v)) for k,v in params]
   # Combine key value pairs into a string.
   normalized_params = '&'.join(['%s=%s' % (k, v) for k, v in params])
@@ -100,10 +113,16 @@ def om(consumer, url, post_params, token=None, method='POST', realm=None, timest
                            '&' + escape(normalized_params))
 
   # HMAC-SHA1
-  hashed = hmac.new(hmac_key, signature_base_string, hashlib.sha1)
+  hashed = hmac.new(hmac_key.encode('utf-8'),
+                    signature_base_string.encode('utf-8'),
+                    hashlib.sha1)
 
   # Calculate the digest base 64.
   oauth_signature = binascii.b2a_base64(hashed.digest())[:-1]
+  if PY3:
+      # binascii.b2a_base64 will return bytes in Python3
+      # convert it to unicode here.
+      oauth_signature = oauth_signature.decode('utf-8')
 
   # Build the Authorization header
   authorization_params = [('oauth_signature', oauth_signature)]
