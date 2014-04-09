@@ -72,6 +72,8 @@ function om(consumer, urlString, params, token, method, realm, timestamp, nonce)
         qs.escape(paramsString)
     ].join("&");
 
+    signatureBase = signatureBase.replace(/\*/g, '%252A');
+
     var hmac = crypto.createHmac("sha1", hmacKey);
     hmac.update(signatureBase);
 

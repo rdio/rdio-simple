@@ -43,7 +43,10 @@ def test(consumer,
           nonce if nonce is not None else str(random.randint(0, 1000000))]
   results = []
   for language, command in testers:
-    results.append((language, subprocess.check_output(command + args)))
+    try:
+      results.append((language, subprocess.check_output(command + args)))
+    except Exception as e:
+      results.append((language, 'Error encountered: %s' % repr(e)))
 
   if len(set(result for language, result in results)) > 1:
     print 'ERROR:'
@@ -64,6 +67,7 @@ test(('a','b'), 'http://www.EXAMPLE.com/', {})
 test(('a','b'), 'http://www.example.com/~test/', {})
 test(('a','b'), 'http://www.example.com/'+urllib.quote(u'fran\xe7ais'.encode('UTF-8')), {})
 test(('a','b'), 'http://www.example.com/', {'test':'thing', 'other':'test'})
+test(('a','b'), 'http://www.example.com/', {'extras':'-*,names', 'foo':'-._~%+&=I what'})
 test(('a','b'), 'http://www.example.com/', {'test':'thing', 'TEST':'foo'})
 test(('a','b'), 'http://www.example.com/', {'language':u'Fran\xe7ais'.encode('UTF-8')})
 test(('a','b'), 'http://www.example.com/', {},
