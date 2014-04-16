@@ -36,8 +36,7 @@
 
 require 'uri'
 require 'cgi'
-require 'digest'
-require 'digest/sha1'
+require 'openssl'
 
 if not "".respond_to?(:encoding)
   # ruby 1.8 doesn't know about unicode :(
@@ -136,11 +135,11 @@ def om(consumer, url, post_params, token=nil, method='POST', realm=nil, timestam
                            '&' + percent_encode(normalized_params))
   
   # HMAC-SHA1
-  hmac = Digest::HMAC.new(hmac_key, Digest::SHA1)
-  hmac.update(signature_base_string)
+  digest  = OpenSSL::Digest::Digest.new('sha1')
+  hmac = OpenSSL::HMAC.digest(digest, hmac_key, signature_base_string)
 
   # Calculate the digest base 64. Drop the trailing \n
-  oauth_signature = [hmac.digest].pack('m0').strip
+  oauth_signature = [hmac].pack('m0').strip
 
   # Build the Authorization header
   if realm
