@@ -102,7 +102,10 @@ def om(consumer, url, post_params, token=None, method='POST', realm=None, timest
   # Sort lexicographically, first after key, then after value.
   params.sort()
   # UTF-8 and escape the key/value pairs
-  def escape(s): return quote(s.encode('utf-8'), safe='~')
+  def escape(s):
+    s_encoded = s.encode('utf-8')
+    safe_chars_encoded = u'~'.encode('utf-8')
+    return quote(s_encoded, safe=safe_chars_encoded)
   params = [(escape(k), escape(v)) for k,v in params]
   # Combine key value pairs into a string.
   normalized_params = '&'.join(['%s=%s' % (k, v) for k, v in params])
