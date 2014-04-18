@@ -135,7 +135,7 @@ def om(consumer, url, post_params, token=nil, method='POST', realm=nil, timestam
                            '&' + percent_encode(normalized_params))
   
   # HMAC-SHA1
-  digest  = OpenSSL::Digest::Digest.new('sha1')
+  digest  = OpenSSL::Digest.new('sha1')
   hmac = OpenSSL::HMAC.digest(digest, hmac_key, signature_base_string)
 
   # Calculate the digest base 64. Drop the trailing \n
