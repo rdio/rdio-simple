@@ -20,6 +20,7 @@ import urllib, subprocess, time, random
 
 testers = [('PHP', ['php', './tester.php']),
     ('Python', ['python', './tester.py']),
+    ('Python3', ['python3', './tester.py']),
     ('Ruby', ['ruby', './tester.rb']),
     ('Ruby 1.9', ['ruby-1.9', './tester.rb']),
     ('Node.js', ['node', './tester.node']),
