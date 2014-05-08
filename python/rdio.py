@@ -19,7 +19,6 @@
 
 from __future__ import unicode_literals
 
-from om import om
 try:
     from urllib.request import urlopen, Request
     from urllib.parse import urlencode
@@ -30,6 +29,13 @@ except ImportError:
     from urlparse import parse_qsl
 
 import json
+import sys
+
+from om import om
+
+
+PY3 = (sys.version_info >= (3, 0, 0))
+
 
 class Rdio:
   def __init__(self, consumer, token=None):
@@ -39,6 +45,11 @@ class Rdio:
 
   def __signed_post(self, url, params):
     auth = om(self.__consumer, url, params, self.token)
+    if not PY3:
+        encoded_params = {}
+        for k, v in params.items():
+            encoded_params[k.encode('utf-8')] = v.encode('utf-8')
+        params = encoded_params
     # Second parameter to Request should be a bytes (Python3) or str (Python2)
     # Since we are using unicode everywhere, we should do an encode
     # and set Content-Type header accordingly
