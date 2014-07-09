@@ -54,14 +54,14 @@ if ($_SESSION['oauth_token'] && $_SESSION['oauth_token_secret']) {
   $currentUser = $rdio->call('currentUser');
   if ($currentUser) {
     ?><h1><?=$currentUser->result->firstName?>'s Playlists</h1>
-      <ul><?
+      <ul><?php
     $myPlaylists = $rdio->call('getPlaylists')->result->owned;
     
     # list them
     foreach ($myPlaylists as $playlist) {
-      ?><li><a href="<?= $playlist->shortUrl?>"><?=$playlist->name?></a></li><?
+      ?><li><a href="<?= $playlist->shortUrl?>"><?=$playlist->name?></a></li><?php
     }
-    ?></ul><a href="?logout=1">Log out.</a><?
+    ?></ul><a href="?logout=1">Log out.</a><?php
   } else {
     # auth failure, clear session
     session_destroy();
