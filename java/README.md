@@ -51,7 +51,7 @@ Before you can compile or run it you'll have to create a:
 
     examples/com/rdio/simple/examples/ConsumerCredentials.java
 
-with consumer credentials from http://developer.rdio.com/
+with consumer credentials from http://www.rdio.com/developers/
 
 There's an additional example available at:
 

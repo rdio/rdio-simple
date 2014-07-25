@@ -62,4 +62,4 @@ directory that authenticates a user and then lists their playlists.
 
 To use it make a copy of the `RdioConsumerCredentialsEXAMPLE.cs` as
 `RdioConsumerCredentials.cs` and fill in valid application
-credentials from http://developer.rdio.com/.
+credentials from http://www.rdio.com/developers/.

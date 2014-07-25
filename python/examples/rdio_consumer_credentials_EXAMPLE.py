@@ -2,7 +2,7 @@
 # OAuth keys to get the examples to work.
 #
 # You can get OAuth keys by signing up for a developer account at:
-# http://developer.rdio.com/
+# http://www.rdio.com/developers/
 RDIO_CONSUMER_KEY = 'your key here'
 RDIO_CONSUMER_SECRET = 'your secret here'
 

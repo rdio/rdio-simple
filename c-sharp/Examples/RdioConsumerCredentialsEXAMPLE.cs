@@ -21,7 +21,7 @@
 
 /* 
  * you can get these by signing up for a developer account at:
- * http://developer.rdio.com/
+ * http://www.rdio.com/developers/
  */
 
 using Rdio.Simple;
