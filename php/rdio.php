@@ -27,18 +27,23 @@ class Rdio {
     $this->token = $token;
   }
 
-  private function __signed_post($url, $params) {
-    $auth = om($this->consumer, $url, $params, $this->token);
+  private function __signed_post($url, $params, $isMultipart=FALSE) {
+    if ($isMultipart) {
+      // Don't include the parameters in the signature if multipart/form-data
+      // http://tools.ietf.org/html/rfc5849#section-3.4.1.3.1
+      $auth = om($this->consumer, $url, array(), $this->token);
+      $postbody = $params;
+    } else {
+      $auth = om($this->consumer, $url, $params, $this->token);
+      $postbody = http_build_query($params);
+    }
 
     $curl = curl_init($url);
-    $postbody = http_build_query($params);
-    //curl_setopt($curl, CURLOPT_VERBOSE, TRUE);
+    // curl_setopt($curl, CURLOPT_VERBOSE, TRUE);
     curl_setopt($curl, CURLOPT_POST, TRUE);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($curl, CURLOPT_POSTFIELDS, $postbody);
-    curl_setopt($curl, CURLOPT_HTTPHEADER,
-      array('Content-type: application/x-www-form-urlencoded',
-      'Authorization: '.$auth));
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: '.$auth));
     $body = curl_exec($curl);
     curl_close($curl);
     return $body;
@@ -61,9 +66,10 @@ class Rdio {
     $this->token = array($parsed['oauth_token'], $parsed['oauth_token_secret']);
   }
 
-  function call($method, $params=array()) {
+  function call($method, $params=array(), $isMultipart=FALSE) {
     $params['method'] = $method;
-    return json_decode($this->__signed_post('http://api.rdio.com/1/', $params));
+    return json_decode($this->__signed_post('http://api.rdio.com/1/', $params,
+      $isMultipart));
   }
 };
 ?>
