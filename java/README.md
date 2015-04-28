@@ -1,6 +1,6 @@
 #rdio-simple for Java
 
-**An Rdio client including a built-in OAuth implementation.**
+An Rdio client including a built-in OAuth 1.0 implementation.
 
 This has library only depends on libraries included by default in recent
 versions of Java. It has been tested with Java 1.6.0.
