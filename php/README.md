@@ -1,7 +1,7 @@
 rdio-simple for PHP
 ===================
 
-An Rdio client including a built-in OAuth implementation.
+An Rdio client including a built-in OAuth 1.0 implementation.
 
 Requirements
 ------------
