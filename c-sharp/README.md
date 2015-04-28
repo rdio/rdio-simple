@@ -1,7 +1,7 @@
 RdioSimple for C# / .NET
 ========================
 
-An Rdio web service API client including a built-in OAuth implementation.
+An Rdio web service API client including a built-in OAuth 1.0 implementation.
 
 This code doesn't have any dependencies outside of the core C#/.NET 2.0 
 framework. The example uses LINQ and JSON.NET.
