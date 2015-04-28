@@ -1,7 +1,7 @@
 rdio-simple for JavaScript (node.js)
 ====================================
 
-An Rdio client including a built-in OAuth implementation.
+An Rdio client including a built-in OAuth 1.0 implementation.
 
 It has been tested on the 0.4 branch of node.
 
