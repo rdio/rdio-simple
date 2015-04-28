@@ -1,7 +1,7 @@
 rdio-simple for Ruby
 ====================
 
-An Rdio client including a built-in OAuth implementation.
+An Rdio client including a built-in OAuth 1.0 implementation.
 
 It's built for Ruby 1.8. Its only dependency is the JSON gem. It probably
 works in Ruby 1.9 and other Ruby environments, but that hasn't been tested.
