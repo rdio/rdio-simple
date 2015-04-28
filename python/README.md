@@ -1,7 +1,7 @@
 rdio-simple for Python
 ======================
 
-An Rdio client including a built-in OAuth implementation.
+An Rdio client including a built-in OAuth 1.0 implementation.
 
 This library only depends on libraries included by default in recent
 versions of Python. It has been tested with Python 2.6.
